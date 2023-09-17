@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PITUCA</title>
+    <style>
+        /* Estilos CSS para a interface moderna */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            font-size: 1.5em;
+        }
+
+        .section p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Estilos do Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .modal-content {
+            background-color: white;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        /* Estilos do Formulário */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PITUCA</h1>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>Bem-vindo ao Nosso Site</h2>
+            <p>
+                Este é um site simples e fácil de usar. Navegue pelas seções abaixo para encontrar informações sobre diferentes tópicos.
+            </p>
+            <button class="button" id="entrarButton">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Login e Registro -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Login ou Registro</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Nome de usuário">
+                <input type="password" id="loginPassword" placeholder="Senha">
+                <button type="submit" class="button">Entrar</button>
+            </form>
+            <form id="registerForm">
+                <input type="text" id="registerUsername" placeholder="Nome de usuário">
+                <input type="password" id="registerPassword" placeholder="Senha">
+                <button type="submit" class="button">Registrar</button>
+            </form>
+            <p id="loginErrorMessage" style="color: red; display: none;">Nome de usuário não encontrado. Tente novamente ou registre-se.</p>
+            <p id="registerErrorMessage" style="color: red; display: none;">Por favor, preencha todos os campos.</p>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("loginModal");
+        var closeButton = document.getElementById("closeModal");
+
+        // Armazene os nomes de usuário existentes (substitua isso com um banco de dados real)
+        var existingUsernames = [];
+
+        document.getElementById("entrarButton").addEventListener("click", function() {
+            modal.style.display = "block";
+        });
+
+        closeButton.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        window.addEventListener("click", function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        var loginForm = document.getElementById("loginForm");
+        var registerForm = document.getElementById("registerForm");
+        var loginErrorMessage = document.getElementById("loginErrorMessage");
+        var registerErrorMessage = document.getElementById("registerErrorMessage");
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            var username = document.getElementById("loginUsername").value;
+            var password = document.getElementById("loginPassword").value;
+
+            // Adicione aqui a lógica de autenticação
+            // Por exemplo, verifique se o nome de usuário e a senha correspondem aos registros existentes.
+            // Se não corresponder, exiba uma mensagem de erro.
+
+            var userExists = existingUsernames.includes(username);
+
+            if (userExists) {   
+                // Redirecionar para a página de tópicos após o login bem-sucedido
+                window.location.href = "pagina_de_topicos.html";
+            } else {
+                loginErrorMessage.style.display = "block";
+            }
+        });
+
+        registerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            var newUsername = document.getElementById("registerUsername").value;
+            var newPassword = document.getElementById("registerPassword").value;
+
+            if (newUsername.trim() === "" || newPassword.trim() === "") {
+                // Verifica se o nome de usuário ou senha estão em branco
+                registerErrorMessage.style.display = "block";
+            } else if (existingUsernames.includes(newUsername)) {
+                alert("Nome de usuário já existe. Escolha outro.");
+            } else {
+                // Adicione o novo nome de usuário aos registros existentes
+                existingUsernames.push(newUsername);
+
+                // Aqui você pode adicionar a lógica de armazenamento seguro para a senha
+                // Por exemplo, armazenar a senha com hash em um banco de dados seguro.
+
+                alert("Registro concluído com sucesso!");
+                modal.style.display = "none";
+                registerForm.reset();
+            }
+        });
+
+        // Limpa a mensagem de erro quando o usuário começa a digitar no campo de registro
+        document.getElementById("registerUsername").addEventListener("input", function() {
+            registerErrorMessage.style.display = "none";
+        });
+
+        document.getElementById("registerPassword").addEventListener("input", function() {
+            registerErrorMessage.style.display = "none";
+        });
+    </script>
+</body>
+</html>
